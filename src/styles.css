@@ -9,6 +9,7 @@
   --gradiente-claro: linear-gradient(135deg, #f0fdf4 0%, #bbf7d0 100%);
   --container-claro: #f7fdf9;
   --cat-card-claro: #d4f8e6;
+  --cor-empty: #95a69c;
 
   /* Fundo e Cards Modo Escuro */
   --gradiente-dark: linear-gradient(135deg, #064e3b 0%, #022c22 100%);

@@ -236,7 +236,7 @@ td {
 .empty-msg {
     text-align: left;
     padding: 20px 10px;
-    color: var(--cat-card-claro);
+    color: var(--cor-empty);
     font-style: italic;
 }
 
