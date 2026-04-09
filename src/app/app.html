@@ -59,9 +59,11 @@
       <p class="empty-msg">Nenhum gasto registrado ainda.</p>
     }
 
-    <div class="totalizador" *ngIf="listaGastos().length > 0">
+    @if (listaGastos().length > 0) {
+    <div class="totalizador">
       <strong>Total Geral: </strong>
       <span data-cy="total-geral">{{ totalGeral() | currency:'BRL' }}</span>
     </div>
+    }
     </section>
 </div>
