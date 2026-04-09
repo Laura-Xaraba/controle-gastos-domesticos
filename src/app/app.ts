@@ -109,4 +109,22 @@ export class AppComponent implements OnInit {
     link.click();
     document.body.removeChild(link);
   }
+
+  // Método para limpar todos os gastos, com confirmação
+  limparTudo() {
+    // 1. Confirmação de limpeza, primeira trava de segurança
+    const confirmar = confirm('Tem certeza que deseja limpar todos os gastos? Esta ação não pode ser desfeita.');
+    
+    if (confirmar) {
+      // 2. Segunda trava
+      const certeza = confirm('Esta é a última confirmação. Todos os seus gastos serão permanentemente removidos. Deseja continuar?');
+    
+      if (certeza) {
+        // 3. Reset do Signal e limpeza do localStorage
+        this.listaGastos.set([]);
+        localStorage.removeItem('meus-gastos');
+      }
+    }
+  }
+
 }

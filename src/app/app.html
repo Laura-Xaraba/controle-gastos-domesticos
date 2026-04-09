@@ -34,9 +34,14 @@
   <section class="lista-gastos">
     <div class="header-lista">
       <h3>Histórico de Despesas</h3>
-      <button (click)="exportarCSV()" class="btn-exportar" title="Exportar para Excel">
-        📥 Exportar Planilha
-      </button>
+      <div class="botoes-acoes">
+        <button (click)="exportarCSV()" class="btn-exportar" title="Exportar para Excel">
+          📥 Exportar Planilha
+        </button>
+        <button (click)="limparTudo()" class="btn-limpar" title="Limpar Todos os Gastos">
+          🗑️ Limpar Mês
+        </button>
+      </div>
     </div>
 
     @if (listaGastos().length > 0) {

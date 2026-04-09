@@ -106,6 +106,25 @@ hr {
     margin-bottom: 10px;
 }
 
+.botoes-acoes {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-limpar {
+    background-color: transparent;
+    color: #ff7675;
+    border: 1px solid #ff7675;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    margin-top: 0;
+}
+
+.btn-limpar:hover {
+    background-color: #ff7675;
+    color: white;
+}
+
 .btn-exportar {
     background-color: #f1f2f6;
     color: #6c5ce7;
