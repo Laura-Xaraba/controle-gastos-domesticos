@@ -49,4 +49,18 @@ export class AppComponent implements OnInit {
     localStorage.setItem('meus-gastos', JSON.stringify(this.listaGastos()));
     this.novoGasto = { descricao: '', valor: 0, categoria: '' };
   }
+
+  removerGasto(index: number) {
+    //1. Confirmação de exclusão
+    if (confirm('Tem certeza que deseja remover este gasto?')) {
+
+      //2. .update para gerar uma nova lista sem o item removido
+      // Filter cria uma nova lista incluindo apenas os itens cujo índice é diferente do índice do item a ser removido
+      this.listaGastos.update(atual => atual.filter((_, i) => i !== index));
+
+      //3. Atualização do localStorage para refletir a remoção
+      localStorage.setItem('meus-gastos', JSON.stringify(this.listaGastos()));
+    }
+  }
+
 }

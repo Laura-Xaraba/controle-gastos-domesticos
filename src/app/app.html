@@ -50,6 +50,10 @@
                 <td>{{ item.descricao }}</td>
                 <td>{{ item.categoria }}</td>
                 <td>{{ item.valor | currency:'BRL' }}</td>
+                <td class="acoes">
+                <button (click)="removerGasto($index)" class="btn-excluir" data-cy="btn-remover">
+                  🗑️
+                </button>
               </tr>
             }
           </tbody>
