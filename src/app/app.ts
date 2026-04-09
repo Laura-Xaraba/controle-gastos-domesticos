@@ -1,7 +1,8 @@
-import { Component, OnInit, signal, computed } from '@angular/core';
+import { Component, OnInit, signal, computed, Renderer2, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Gasto } from './core/models/gasto.model';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -11,86 +12,41 @@ import { Gasto } from './core/models/gasto.model';
 })
 
 export class AppComponent implements OnInit {
-  //Lista sinalizada de gastos
-  listaGastos = signal<Gasto[]>([]);
+  // Injeção do Renderer2 para manipulação de classes CSS
+  private renderer = inject(Renderer2);
 
-  //Objeto simples para armazenar os dados do formulário
-  novoGasto: Gasto = {
-    descricao: '',
+  // --- ESTADOS REATIVOS (Signals) ---
+  darkMode = signal(false);
+  listaGastos = signal<Gasto[]>([]);
+  exibirTutorial = signal(false);
+  abriu = false;
+
+  // Objeto para vincular ao formulário via ngModel
+  novoGasto: Gasto = {descricao: '',
     valor: 0,
     categoria: ''
   };
 
-  // Valor "computado" para o total de gastos, que se atualiza automaticamente quando a lista de gastos muda
+  // --- INTERAÇÕES DE UI ---
+  toggleSeta(event: MouseEvent, element: HTMLSelectElement) {
+  if (this.abriu) {
+    this.abriu = false;
+    element.blur(); // Tira o foco para garantir o reset
+  } else {
+    this.abriu = true;
+  }
+  }
+
+  // --- VALORES COMPUTADOS (AUTOMÁTICOS) ---
+  // Calcula o total geral sempre que a lista muda
   totalGeral = computed(() => {
     return this.listaGastos().reduce((soma, item) => soma + item.valor, 0);
   });
 
-  // Signal para controlar visibilidade do tutoorial
-  exibirTutorial = signal(false);
-
-  ngOnInit() {
-    const dadosSalvos = localStorage.getItem('meus-gastos');
-    if (dadosSalvos) {
-      this.listaGastos.set(JSON.parse(dadosSalvos));
-    }
-
-    // Verifica se é a primeira visita do usuário para exibir o tutorial
-    const tutorialVisualizado = localStorage.getItem('tutorial-visto');
-    if (!tutorialVisualizado) {
-      this.exibirTutorial.set(true);
-    }
-  }
-
-  // Método para fechar o tutorial e marcar como visto no localStorage
-  fecharTutorial() {
-    this.exibirTutorial.set(false);
-    localStorage.setItem('tutorial-visto', 'true');
-  }
-  
-  // Método para abrir o tutorial manualmente
-  abrirTutorial() {
-    this.exibirTutorial.set(true);
-  }
-
-  // Método para adicionar um novo gasto à lista
-  adicionarGasto() {
-    // 1. Verificação de segurança
-    // Trim remove espaços em branco no início e no final da descrição
-    //Verifica se a descrição não está vazia, o valor é positivo e a categoria foi selecionada
-    if (!this.novoGasto.descricao.trim() || this.novoGasto.valor <= 0 || !this.novoGasto.categoria) {
-      alert('Por favor, preencha todos os campos corretamente. O valor deve ser maior que zero.');
-      return;
-    }
-
-    // 2. Quando a validação passar, o gasto é adicionado à lista de gastos
-    this.listaGastos.update(atual => [...atual, { ...this.novoGasto }]);
-
-    // 3. Persistência dos dados no localStorage e limpeza do formulário
-    localStorage.setItem('meus-gastos', JSON.stringify(this.listaGastos()));
-    this.novoGasto = { descricao: '', valor: 0, categoria: '' };
-  }
-
-
-  // Método para remover um gasto da lista, recebendo o índice do item a ser removido
-  removerGasto(index: number) {
-    //1. Confirmação de exclusão
-    if (confirm('Tem certeza que deseja remover este gasto?')) {
-
-      //2. .update para gerar uma nova lista sem o item removido
-      // Filter cria uma nova lista incluindo apenas os itens cujo índice é diferente do índice do item a ser removido
-      this.listaGastos.update(atual => atual.filter((_, i) => i !== index));
-
-      //3. Atualização do localStorage para refletir a remoção
-      localStorage.setItem('meus-gastos', JSON.stringify(this.listaGastos()));
-    }
-  }
-
-  // Sinal computado para calcular o total de gastos por categoria
+  // Agrupa gastos por categoria para o gráfico/cards
   resumoPorCategoria = computed(() => {
     const resumo: { [key: string]: number } = {};
 
-    // Percorre a lista de gastos e acumula o valor total para cada categoria
     this.listaGastos().forEach(gasto => {
       if (!resumo[gasto.categoria]) {
         resumo[gasto.categoria] = 0;
@@ -98,53 +54,122 @@ export class AppComponent implements OnInit {
       resumo[gasto.categoria] += gasto.valor;
     });
 
-    // Retorna um array de objetos par facilitar o uso de @for na template
     return Object.keys(resumo).map(key => ({
       nome: key,
       total: resumo[key]
     }));
   });
 
-  // Método para exportar os gastos em formato CSV
+  ngOnInit() {
+    this.inicializarDados();
+    this.verificarTutorial();
+    this.verificarTema();
+  }
+
+  // --- LÓGICA DE INICIALIZAÇÃO ---
+  private inicializarDados() {
+    const dadosSalvos = localStorage.getItem('meus-gastos');
+    if (dadosSalvos) {
+      this.listaGastos.set(JSON.parse(dadosSalvos));
+    }
+  }
+
+  private verificarTutorial() {
+    const tutorialVisualizado = localStorage.getItem('tutorial-visto');
+    if (!tutorialVisualizado) {
+      this.exibirTutorial.set(true);
+    }
+  }
+
+  private verificarTema() {
+    const temaSalvo = localStorage.getItem('tema-escuro');
+    if (temaSalvo === 'true') {
+      this.aplicarTema(true);
+    }
+  }
+
+  // --- GERENCIAMENTO DE TEMA (DARK MODE) ---
+  toggleDarkMode() {
+    const novoEstado = !this.darkMode();
+    this.aplicarTema(novoEstado);
+  }
+
+  private aplicarTema(escuro: boolean) {
+    this.darkMode.set(escuro);
+    localStorage.setItem('tema-escuro', escuro.toString());
+
+    // Manipulação segura do DOM via Renderer2
+    if (escuro) {
+      this.renderer.addClass(document.body, 'dark-theme');
+    } else {
+      this.renderer.removeClass(document.body, 'dark-theme');
+    }
+  }
+
+  // --- GERENCIAMENTO DO TUTORIAL ---
+  fecharTutorial() {
+    this.exibirTutorial.set(false);
+    localStorage.setItem('tutorial-visto', 'true');
+  }
+  
+  abrirTutorial() {
+    this.exibirTutorial.set(true);
+  }
+
+  // --- OPERAÇÕES DE GASTOS ---
+  adicionarGasto() {
+    // Validação básica de entrada
+    if (!this.novoGasto.descricao.trim() || this.novoGasto.valor <= 0 || !this.novoGasto.categoria) {
+      alert('Por favor, preencha todos os campos corretamente. O valor deve ser maior que zero.');
+      return;
+    }
+
+    // Adiciona à lista usando imutabilidade (spread operator)
+    this.listaGastos.update(atual => [...atual, { ...this.novoGasto }]);
+
+    // Persistência e limpeza
+    this.salvarNoLocalStorage();
+    this.novoGasto = { descricao: '', valor: 0, categoria: '' };
+  }
+
+  removerGasto(index: number) {
+    if (confirm('Tem certeza que deseja remover este gasto?')) {
+      this.listaGastos.update(atual => atual.filter((_, i) => i !== index));
+      this.salvarNoLocalStorage();
+    }
+  }
+
+  private salvarNoLocalStorage() {
+    localStorage.setItem('meus-gastos', JSON.stringify(this.listaGastos()));
+  }
+
+// --- UTILITÁRIOS ---
   exportarCSV() {
     if (this.listaGastos().length === 0) return alert('Não há gastos para exportar.');
 
-    // Cabeçalho do CSV
     const cabecalho = 'Descrição,Valor,Categoria\n';
-
-    // Linhas de dados
     const linhas = this.listaGastos().map(g =>
       `${g.descricao},${g.valor},${g.categoria}`
     ).join('\n');
 
-    // Criação do blob e link para download
     const blob = new Blob([cabecalho + linhas], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
 
     link.setAttribute('href', url);
     link.setAttribute('download', 'meus-gastos.csv');
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
     link.click();
-    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   }
 
-  // Método para limpar todos os gastos, com confirmação
   limparTudo() {
-    // 1. Confirmação de limpeza, primeira trava de segurança
-    const confirmar = confirm('Tem certeza que deseja limpar todos os gastos? Esta ação não pode ser desfeita.');
-    
+    const confirmar = confirm('Deseja limpar todos os gastos? Esta ação não pode ser desfeita.');
     if (confirmar) {
-      // 2. Segunda trava
-      const certeza = confirm('Esta é a última confirmação. Todos os seus gastos serão permanentemente removidos. Deseja continuar?');
-    
+      const certeza = confirm('Confirmar remoção permanente de todos os dados?');
       if (certeza) {
-        // 3. Reset do Signal e limpeza do localStorage
         this.listaGastos.set([]);
         localStorage.removeItem('meus-gastos');
       }
     }
   }
-
 }

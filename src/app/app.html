@@ -1,13 +1,13 @@
+<div class="acoes-globais">
+  <button (click)="toggleDarkMode()" class="btn-flutuante" [title]="darkMode() ? 'Modo Claro' : 'Modo Escuro'">
+    {{ darkMode() ? '☀️' : '🌙' }}
+  </button>
+  <button (click)="abrirTutorial()" class="btn-flutuante" title="Como usar?">
+    ❓
+  </button>
+</div>
+
 <div class="container">
-
-  <header class="app-header">
-    <button (click)="abrirTutorial()" class="btn-ajuda" data-cy="btn-abrir-tutorial">
-      ❓ Como usar?
-    </button>
-  </header>
-
-  <h1>Controle de Gastos Domésticos</h1>
-
   @if (exibirTutorial()){
     <div class="tutorial-overlay" data-cy="tutorial-overlay">
       <div class="tutorial-card">
@@ -15,32 +15,35 @@
         <p>Este app ajuda você a controlar seu dinheiro de forma simples.</p>
         
         <ul class="passos-tutorial">
-          <li><strong>Adicionar Gastos:</strong> Use o formulário para registrar suas despesas, incluindo descrição, valor e categoria.</li>
-          <li><strong>Histórico de Despesas:</strong> Veja uma tabela com todos os gastos registrados, podendo remover itens indesejados.</li>
-          <li><strong>Resumo por Categoria:</strong> Tenha uma visão geral de quanto está gastando em cada categoria.</li>
-          <li><strong>Exportar Planilha:</strong> Exporte seus dados para um arquivo CSV e analise suas finanças no Excel ou Google Sheets.</li>
-          <li><strong>Limpar Mês:</strong> Inicie um novo mês limpando todos os gastos registrados.</li>
+          <li><strong>Adicionar Gastos:</strong> Use o formulário abaixo.</li>
+          <li><strong>Histórico:</strong> Acompanhe suas despesas na tabela.</li>
+          <li><strong>Exportar:</strong> Salve seus dados em CSV.</li>
         </ul>
-        <button (click)="fecharTutorial()" class="btn-entendi" data-cy="btn-fechar-tutorial">Entendi, vamos começar!</button>
+        <button (click)="fecharTutorial()" class="btn-entendi">Entendi, vamos começar!</button>
       </div>
     </div>
   }
-  
+
+  <h1>Controle de Gastos Domésticos</h1>
+
   <section class="formulario">
     <h3>Adicionar Gasto</h3>
 
     <div class="field">
-      <input type="text" placeholder="Descrição do gasto (ex: Aluguel)"
-      [(ngModel)]="novoGasto.descricao" data-cy="input-descricao"/>
+      <input type="text" placeholder="Descrição (ex: Aluguel)" [(ngModel)]="novoGasto.descricao" />
     </div>
 
     <div class="field">
-      <input type="number" placeholder="Valor do gasto (R$)"
-      [(ngModel)]="novoGasto.valor" data-cy="input-valor"/>
+      <input type="number" placeholder="Valor (R$)" [(ngModel)]="novoGasto.valor" />
     </div>
 
     <div class="field">
-      <select [(ngModel)]="novoGasto.categoria" data-cy="select-categoria">
+      <select #selectCategoria
+        [(ngModel)]="novoGasto.categoria" 
+        (mousedown)="toggleSeta($event, selectCategoria)"
+        (blur)="abriu = false"
+        (change)="abriu = false"
+        [class.aberto]="abriu">
         <option value="" disabled selected>Selecione a categoria</option>
         <option value="Alimentação">Alimentação</option>
         <option value="Transporte">Transporte</option>
@@ -51,7 +54,7 @@
       </select>
     </div>
 
-    <button (click)="adicionarGasto()" data-cy="btn-adicionar">Adicionar Gasto</button>
+    <button (click)="adicionarGasto()" class="btn-adicionar">Adicionar Gasto</button>
   </section>
 
   <hr/>
@@ -60,58 +63,50 @@
     <div class="header-lista">
       <h3>Histórico de Despesas</h3>
       <div class="botoes-acoes">
-        <button (click)="exportarCSV()" class="btn-exportar" title="Exportar para Excel">
-          📥 Exportar Planilha
-        </button>
-        <button (click)="limparTudo()" class="btn-limpar" title="Limpar Todos os Gastos">
-          🗑️ Limpar Mês
-        </button>
+        <button (click)="exportarCSV()" class="btn-exportar">📥 Exportar</button>
+        <button (click)="limparTudo()" class="btn-limpar">🗑️ Limpar Mês</button>
       </div>
     </div>
 
     @if (listaGastos().length > 0) {
       <div class="table-card">
-        <table data-cy="tabela-gastos">
+        <table>
           <thead>
             <tr>
               <th>Descrição</th>
               <th>Categoria</th>
               <th>Valor</th>
+              <th style="width: 50px;"></th> 
             </tr>
           </thead>
           <tbody>
-            @for (item of listaGastos(); track item.descricao) {
+            @for (item of listaGastos(); track $index) {
               <tr>
                 <td>{{ item.descricao }}</td>
                 <td>{{ item.categoria }}</td>
                 <td>{{ item.valor | currency:'BRL' }}</td>
                 <td class="acoes">
-                  <button (click)="removerGasto($index)" class="btn-excluir" data-cy="btn-remover">
-                    🗑️
-                  </button>
+                  <button (click)="removerGasto($index)" class="btn-excluir">🗑️</button>
                 </td>
               </tr>
             }
           </tbody>
         </table>
       </div>
+      
+      <div class="totalizador">
+        <strong>Total Geral:</strong>
+        <span>{{ totalGeral() | currency:'BRL' }}</span>
+      </div>
     } @else {
       <p class="empty-msg">Nenhum gasto registrado ainda.</p>
     }
-
-    @if (listaGastos().length > 0) {
-    <div class="totalizador">
-      <strong>Total Geral: </strong>
-      <span data-cy="total-geral">{{ totalGeral() | currency:'BRL' }}</span>
-    </div>
-    }
-    </section>
+  </section>
 
   <hr/>
 
   <section class="resumo">
     <h3>Resumo por Categoria</h3>
-
     <div class="categoria-grid">
       @for (cat of resumoPorCategoria(); track cat.nome) {
         <div class="categoria-card">
@@ -123,5 +118,4 @@
       }
     </div>
   </section>
-
 </div>

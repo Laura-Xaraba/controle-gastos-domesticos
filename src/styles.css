@@ -1,10 +1,181 @@
+:root {
+  /* Cores de Ação (Botões e Destaques) */
+  --verde-primario: #10b981;
+  --verde-hover: #34d399;
+  --gradiente-botao: linear-gradient(90deg, #10b981 0%, #059669 100%);
+  --cor-exclusao: #ff7675;
+
+  /* Fundo Modo Claro */
+  --gradiente-claro: linear-gradient(135deg, #f0fdf4 0%, #bbf7d0 100%);
+  --container-claro: #f7fdf9;
+  --cat-card-claro: #d4f8e6;
+
+  /* Fundo e Cards Modo Escuro */
+  --gradiente-dark: linear-gradient(135deg, #064e3b 0%, #022c22 100%);
+  --cor-dark-card: #13251f;
+  --cor-dark-bg: #1d3d33;
+  --cor-dark-border: #0d3d2e;
+  
+  /* Texto e Linhas */
+  --cor-texto-dark: #dfe6e9;
+  --hr-light: rgba(16, 185, 129, 0.555);
+  --cor-texto-claro: #2d3436;
+}
+
+/* Reset e Configurações Globais */
+* {
+  box-sizing: border-box; 
+}
+
 html, body {
   margin: 0 !important;
   padding: 0 !important;
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
+  /* Gradiente padrão para o Modo Claro */
+  background: var(--gradiente-claro) no-repeat fixed !important;
+  transition: background 0.4s ease;
 }
 
-* {
-  box-sizing: border-box;
+/* --- REGRAS DO MODO ESCURO (Injetado via Renderer2 no body) --- */
+body.dark-theme {
+  background-image: var(--gradiente-dark) !important;
+  background-color: var(--cor-dark-bg) !important;  
+  color: var(--cor-texto-dark) !important;
 }
+
+/* Estilo dos Botões Flutuantes no Dark Mode */
+body.dark-theme .btn-flutuante {
+  background-color: var(--cor-dark-card) !important;
+  color: white !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5) !important;
+}
+
+/* Card Principal (Container) no Dark Mode */
+body.dark-theme .container {
+  background-color: var(--cor-dark-card) !important;
+  color: var(--cor-texto-dark) !important;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.4) !important;
+}
+
+/* Títulos no Dark Mode */
+body.dark-theme h1, 
+body.dark-theme h3 {
+  color: var(--verde-hover) !important; /* Roxo lilás para melhor contraste */
+}
+
+/* Tabela e Listagem no Dark Mode */
+body.dark-theme .table-card {
+    background-color: var(--cor-dark-bg) !important;
+    border: 1px solid var(--cor-dark-border) !important;
+}
+
+body.dark-theme .btn-exportar {
+    background-color: var(--cor-dark-card) !important; /* Usa o verde escuro do card */
+    color: var(--verde-hover) !important;           /* Texto em verde menta claro */
+    border: 1px solid var(--verde-primario) !important; /* Borda verde esmeralda */
+}
+
+body.dark-theme .btn-exportar:hover {
+    background-color: var(--verde-primario) !important;
+    color: white !important;
+}
+
+body.dark-theme .btn-exportar:hover {
+    background-color: var(--verde-hover);
+    color: var(--cor-dark-card);
+    box-shadow: 0 0 15px rgba(52, 211, 153, 0.3);
+}
+
+body.dark-theme th {
+    background-color: rgba(0, 0, 0, 0.2) !important; 
+    color: var(--verde-hover) !important;
+    border-bottom: 1px solid var(--cor-dark-card);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+body.dark-theme td {
+  color: #f5f6fa !important;
+  border-bottom: 1px solid #13221b !important;
+  background-color: transparent !important;
+}
+
+/* Cards de Categoria (Resumo) no Dark Mode */
+body.dark-theme .categoria-card {
+  background-color: var(--cor-dark-bg) !important;
+  border-left: 6px solid var(--verde-hover) !important;
+  box-shadow: 0 4px 6px #13221b;
+}
+
+body.dark-theme .cat-nome {
+  color: var(--verde-hover) !important; 
+  font-weight: bold !important;
+}
+
+body.dark-theme .cat-valor {
+  color: var(--cor-texto-dark) !important; /* Branco puro para máxima legibilidade */
+  font-size: 1.2rem !important;
+}
+
+/* Tutorial no Dark Mode */
+body.dark-theme .tutorial-card {
+  background-color: var(--cor-dark-card) !important;
+  color: var(--cor-texto-dark) !important;
+}
+
+body.dark-theme .tutorial-card h2 {
+  color: var(--verde-hover) !important;
+}
+
+body.dark-theme .passos-tutorial li {
+  color: var(--cat-card-claro) !important;
+}
+
+body.dark-theme .passos-tutorial li strong {
+  color: var(--cor-texto-dark) !important;
+}
+
+/* Mensagens de estado vazio */
+body.dark-theme .empty-msg {
+  color: var(--cat-card-claro) !important;
+}
+
+body.dark-theme .btn-adicionar {
+    background: var(--gradiente-botao) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); 
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover do botão de adicionar no Dark Mode */
+body.dark-theme .btn-adicionar:hover {
+    transform: translateY(-2px); 
+    filter: brightness(1.2);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); 
+    cursor: pointer;
+}
+
+body.dark-theme .btn-adicionar:active {
+    transform: translateY(0);
+    filter: brightness(0.9);
+}
+
+body.dark-theme .btn-excluir-tudo {
+    background-color: rgba(255, 121, 121, 0.1);
+    border: 1px solid #ff7979;
+    color: #ff7979;
+}
+
+body.dark-theme .btn-excluir-tudo:hover {
+    background-color: #ff7979;
+    color: white;
+    box-shadow: 0 0 15px rgba(255, 121, 121, 0.4);
+}
+
+body.dark-theme .totalizador {
+    background-color: #173128 !important;
+    border-color: var(--verde-hover) !important;
+    box-shadow: none; 
+    color: var(--cor-texto-dark);
+  }
