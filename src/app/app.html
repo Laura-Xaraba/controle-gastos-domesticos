@@ -51,9 +51,10 @@
                 <td>{{ item.categoria }}</td>
                 <td>{{ item.valor | currency:'BRL' }}</td>
                 <td class="acoes">
-                <button (click)="removerGasto($index)" class="btn-excluir" data-cy="btn-remover">
-                  🗑️
-                </button>
+                  <button (click)="removerGasto($index)" class="btn-excluir" data-cy="btn-remover">
+                    🗑️
+                  </button>
+                </td>
               </tr>
             }
           </tbody>
@@ -70,4 +71,22 @@
     </div>
     }
     </section>
+
+  <hr/>
+
+  <section class="resumo">
+    <h3>Resumo por Categoria</h3>
+
+    <div class="categoria-grid">
+      @for (cat of resumoPorCategoria(); track cat.nome) {
+        <div class="categoria-card">
+          <span class="cat-nome">{{ cat.nome }}</span>
+          <span class="cat-valor">{{ cat.total | currency:'BRL' }}</span>
+        </div>
+      } @empty {
+        <p class="empty-msg">Adicione gastos para ver o resumo.</p>
+      }
+    </div>
+  </section>
+
 </div>

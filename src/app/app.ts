@@ -33,6 +33,7 @@ export class AppComponent implements OnInit {
     }
   }
 
+  // Método para adicionar um novo gasto à lista
   adicionarGasto() {
     // 1. Verificação de segurança
     // Trim remove espaços em branco no início e no final da descrição
@@ -50,6 +51,8 @@ export class AppComponent implements OnInit {
     this.novoGasto = { descricao: '', valor: 0, categoria: '' };
   }
 
+
+  // Método para remover um gasto da lista, recebendo o índice do item a ser removido
   removerGasto(index: number) {
     //1. Confirmação de exclusão
     if (confirm('Tem certeza que deseja remover este gasto?')) {
@@ -63,4 +66,22 @@ export class AppComponent implements OnInit {
     }
   }
 
-}
+  // Sinal computado para calcular o total de gastos por categoria
+  resumoPorCategoria = computed(() => {
+    const resumo: { [key: string]: number } = {};
+
+    // Percorre a lista de gastos e acumula o valor total para cada categoria
+    this.listaGastos().forEach(gasto => {
+      if (!resumo[gasto.categoria]) {
+        resumo[gasto.categoria] = 0;
+      }
+      resumo[gasto.categoria] += gasto.valor;
+    });
+
+    // Retorna um array de objetos par facilitar o uso de @for na template
+    return Object.keys(resumo).map(key => ({
+      nome: key,
+      total: resumo[key]
+    }));
+  });
+};
