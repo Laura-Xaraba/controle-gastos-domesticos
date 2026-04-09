@@ -34,17 +34,19 @@ export class AppComponent implements OnInit {
   }
 
   adicionarGasto() {
-    // Adiciona o novo gasto à lista usando o método "update" para garantir que a reatividade funcione corretamente
+    // 1. Verificação de segurança
+    // Trim remove espaços em branco no início e no final da descrição
+    //Verifica se a descrição não está vazia, o valor é positivo e a categoria foi selecionada
+    if (!this.novoGasto.descricao.trim() || this.novoGasto.valor <= 0 || !this.novoGasto.categoria) {
+      alert('Por favor, preencha todos os campos corretamente. O valor deve ser maior que zero.');
+      return;
+    }
+
+    // 2. Quando a validação passar, o gasto é adicionado à lista de gastos
     this.listaGastos.update(atual => [...atual, { ...this.novoGasto }]);
 
-    // Salva a lista atualizada no localStorage
+    // 3. Persistência dos dados no localStorage e limpeza do formulário
     localStorage.setItem('meus-gastos', JSON.stringify(this.listaGastos()));
-
-    // Limpa o formulário
-    this.novoGasto = {
-      descricao: '',
-      valor: 0,
-      categoria: ''
-    };
+    this.novoGasto = { descricao: '', valor: 0, categoria: '' };
   }
 }
