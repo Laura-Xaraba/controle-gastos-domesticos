@@ -32,8 +32,13 @@
   <hr/>
 
   <section class="lista-gastos">
-    <h3>Histórico de Despesas</h3>
-  
+    <div class="header-lista">
+      <h3>Histórico de Despesas</h3>
+      <button (click)="exportarCSV()" class="btn-exportar" title="Exportar para Excel">
+        📥 Exportar Planilha
+      </button>
+    </div>
+
     @if (listaGastos().length > 0) {
       <div class="table-card">
         <table data-cy="tabela-gastos">

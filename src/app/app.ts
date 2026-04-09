@@ -84,4 +84,29 @@ export class AppComponent implements OnInit {
       total: resumo[key]
     }));
   });
-};
+
+  // Método para exportar os gastos em formato CSV
+  exportarCSV() {
+    if (this.listaGastos().length === 0) return alert('Não há gastos para exportar.');
+
+    // Cabeçalho do CSV
+    const cabecalho = 'Descrição,Valor,Categoria\n';
+
+    // Linhas de dados
+    const linhas = this.listaGastos().map(g =>
+      `${g.descricao},${g.valor},${g.categoria}`
+    ).join('\n');
+
+    // Criação do blob e link para download
+    const blob = new Blob([cabecalho + linhas], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'meus-gastos.csv');
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+}
