@@ -1,5 +1,30 @@
 <div class="container">
+
+  <header class="app-header">
+    <button (click)="abrirTutorial()" class="btn-ajuda" data-cy="btn-abrir-tutorial">
+      ❓ Como usar?
+    </button>
+  </header>
+
   <h1>Controle de Gastos Domésticos</h1>
+
+  @if (exibirTutorial()){
+    <div class="tutorial-overlay" data-cy="tutorial-overlay">
+      <div class="tutorial-card">
+        <h2>👋 Bem-vindo(a)!</h2>
+        <p>Este app ajuda você a controlar seu dinheiro de forma simples.</p>
+        
+        <ul class="passos-tutorial">
+          <li><strong>Adicionar Gastos:</strong> Use o formulário para registrar suas despesas, incluindo descrição, valor e categoria.</li>
+          <li><strong>Histórico de Despesas:</strong> Veja uma tabela com todos os gastos registrados, podendo remover itens indesejados.</li>
+          <li><strong>Resumo por Categoria:</strong> Tenha uma visão geral de quanto está gastando em cada categoria.</li>
+          <li><strong>Exportar Planilha:</strong> Exporte seus dados para um arquivo CSV e analise suas finanças no Excel ou Google Sheets.</li>
+          <li><strong>Limpar Mês:</strong> Inicie um novo mês limpando todos os gastos registrados.</li>
+        </ul>
+        <button (click)="fecharTutorial()" class="btn-entendi" data-cy="btn-fechar-tutorial">Entendi, vamos começar!</button>
+      </div>
+    </div>
+  }
   
   <section class="formulario">
     <h3>Adicionar Gasto</h3>

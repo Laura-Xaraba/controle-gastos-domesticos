@@ -35,6 +35,69 @@ body {
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
+.tutorial-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(108, 92, 231, 0.8); /* Roxo com transparência */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.tutorial-card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.passos-tutorial {
+    text-align: left;
+    margin: 20px 0;
+    padding-left: 20px;
+    color: #636e72;
+}
+
+.passos-tutorial li {
+    margin-bottom: 10px;
+}
+
+.btn-entendi {
+    width: 100%;
+    background-color: #6c5ce7;
+}
+
+.ajuda-topo {
+    text-align: right;
+    margin-bottom: -20px;
+}
+
+.btn-ajuda {
+    background: #f1f2f6; 
+    color: #6c5ce7;     
+    font-size: 0.75rem;
+    padding: 5px 12px;
+    margin: 0;
+    border: 1px dashed #6c5ce7; 
+    border-radius: 20px;     
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 600;
+}
+
+.btn-ajuda:hover {
+    background: #6c5ce7;
+    color: white;
+    border-style: solid; 
+}
+
 h1 {
     text-align: center;
     margin-bottom: 30px;

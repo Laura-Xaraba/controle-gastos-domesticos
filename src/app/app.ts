@@ -26,11 +26,31 @@ export class AppComponent implements OnInit {
     return this.listaGastos().reduce((soma, item) => soma + item.valor, 0);
   });
 
-  ngOnInit(): void {
+  // Signal para controlar visibilidade do tutoorial
+  exibirTutorial = signal(false);
+
+  ngOnInit() {
     const dadosSalvos = localStorage.getItem('meus-gastos');
     if (dadosSalvos) {
       this.listaGastos.set(JSON.parse(dadosSalvos));
     }
+
+    // Verifica se é a primeira visita do usuário para exibir o tutorial
+    const tutorialVisualizado = localStorage.getItem('tutorial-visto');
+    if (!tutorialVisualizado) {
+      this.exibirTutorial.set(true);
+    }
+  }
+
+  // Método para fechar o tutorial e marcar como visto no localStorage
+  fecharTutorial() {
+    this.exibirTutorial.set(false);
+    localStorage.setItem('tutorial-visto', 'true');
+  }
+  
+  // Método para abrir o tutorial manualmente
+  abrirTutorial() {
+    this.exibirTutorial.set(true);
   }
 
   // Método para adicionar um novo gasto à lista
