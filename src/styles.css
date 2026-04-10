@@ -34,7 +34,6 @@ html, body {
   width: 100%;
   min-height: 100vh;
   font-family: "Inter", sans-serif;
-  /* Gradiente padrão para o Modo Claro */
   background: var(--gradiente-claro) no-repeat fixed !important;
   transition: background 0.4s ease;
 }
@@ -63,7 +62,7 @@ body.dark-theme .container {
 /* Títulos no Dark Mode */
 body.dark-theme h1, 
 body.dark-theme h3 {
-  color: var(--verde-hover) !important; /* Roxo lilás para melhor contraste */
+  color: var(--verde-hover) !important; 
 }
 
 /* Tabela e Listagem no Dark Mode */
@@ -73,9 +72,9 @@ body.dark-theme .table-card {
 }
 
 body.dark-theme .btn-exportar {
-    background-color: var(--cor-dark-card) !important; /* Usa o verde escuro do card */
-    color: var(--verde-hover) !important;           /* Texto em verde menta claro */
-    border: 1px solid var(--verde-primario) !important; /* Borda verde esmeralda */
+    background-color: var(--cor-dark-card) !important;
+    color: var(--verde-hover) !important;         
+    border: 1px solid var(--verde-primario) !important;
 }
 
 body.dark-theme .btn-exportar:hover {
@@ -116,7 +115,7 @@ body.dark-theme .cat-nome {
 }
 
 body.dark-theme .cat-valor {
-  color: var(--cor-texto-dark) !important; /* Branco puro para máxima legibilidade */
+  color: var(--cor-texto-dark) !important; 
   font-size: 1.2rem !important;
 }
 

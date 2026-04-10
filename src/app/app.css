@@ -355,7 +355,7 @@ button {
 }
 
 .btn-excluir {
-    color: #b2bec3; /* Cinza discreto inicial */
+    color: #b2bec3;
     background: transparent;
     border: none;
     transition: all 0.2s ease;
@@ -369,7 +369,7 @@ button {
 }
 
 .btn-excluir:hover {
-    color: #e74c3c !important; /* Vermelho vivo para contraste no branco */
+    color: #e74c3c !important; 
     transform: scale(1.1);
 }
 
