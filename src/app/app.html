@@ -1,5 +1,5 @@
 <div class="acoes-globais">
-  <button (click)="toggleDarkMode()" class="btn-flutuante" [title]="darkMode() ? 'Modo Claro' : 'Modo Escuro'">
+  <button (click)="toggleDarkMode()" class="btn-flutuante" data-cy="btn-dark-mode" [title]="darkMode() ? 'Modo Claro' : 'Modo Escuro'">
     {{ darkMode() ? '☀️' : '🌙' }}
   </button>
   <button (click)="abrirTutorial()" class="btn-flutuante" title="Como usar?">
@@ -19,7 +19,7 @@
           <li><strong>Histórico:</strong> Acompanhe suas despesas na tabela.</li>
           <li><strong>Exportar:</strong> Salve seus dados em CSV.</li>
         </ul>
-        <button (click)="fecharTutorial()" class="btn-entendi">Entendi, vamos começar!</button>
+        <button (click)="fecharTutorial()" class="btn-entendi" data-cy="btn-fechar-tutorial">Entendi, vamos começar!</button>
       </div>
     </div>
   }
@@ -30,15 +30,16 @@
     <h3>Adicionar Gasto</h3>
 
     <div class="field">
-      <input type="text" placeholder="Descrição (ex: Aluguel)" [(ngModel)]="novoGasto.descricao" />
+      <input type="text" placeholder="Descrição (ex: Aluguel)" data-cy="input-descricao" [(ngModel)]="novoGasto.descricao" />
     </div>
 
     <div class="field">
-      <input type="number" placeholder="Valor (R$)" [(ngModel)]="novoGasto.valor" />
+      <input type="number" placeholder="Valor (R$)" data-cy="input-valor" [(ngModel)]="novoGasto.valor" />
     </div>
 
     <div class="field">
       <select #selectCategoria
+        data-cy="select-categoria"
         [(ngModel)]="novoGasto.categoria" 
         (mousedown)="toggleSeta($event, selectCategoria)"
         (blur)="abriu = false"
@@ -54,12 +55,12 @@
       </select>
     </div>
 
-    <button (click)="adicionarGasto()" class="btn-adicionar">Adicionar Gasto</button>
+    <button (click)="adicionarGasto()" class="btn-adicionar" data-cy="btn-adicionar">Adicionar Gasto</button>
   </section>
 
   <hr/>
 
-  <section class="lista-gastos">
+  <section class="lista-gastos" data-cy="secao-historico">
     <div class="header-lista">
       <h3>Histórico de Despesas</h3>
       <div class="botoes-acoes">
@@ -81,12 +82,12 @@
           </thead>
           <tbody>
             @for (item of listaGastos(); track $index) {
-              <tr>
-                <td>{{ item.descricao }}</td>
-                <td>{{ item.categoria }}</td>
-                <td>{{ item.valor | currency:'BRL' }}</td>
+              <tr data-cy="item-gasto">
+                <td data-cy="gasto-descricao">{{ item.descricao }}</td>
+                <td data-cy="gasto-categoria">{{ item.categoria }}</td>
+                <td data-cy="gasto-valor">{{ item.valor | currency:'BRL' }}</td>
                 <td class="acoes">
-                  <button (click)="removerGasto($index)" class="btn-excluir">🗑️</button>
+                  <button (click)="removerGasto($index)" class="btn-excluir" data-cy="btn-excluir">🗑️</button>
                 </td>
               </tr>
             }
@@ -109,9 +110,9 @@
     <h3>Resumo por Categoria</h3>
     <div class="categoria-grid">
       @for (cat of resumoPorCategoria(); track cat.nome) {
-        <div class="categoria-card">
-          <span class="cat-nome">{{ cat.nome }}</span>
-          <span class="cat-valor">{{ cat.total | currency:'BRL' }}</span>
+        <div class="categoria-card" data-cy="card-resumo-categoria">
+          <span class="cat-nome" data-cy="nome-categoria">{{ cat.nome }}</span>
+          <span class="cat-valor" data-cy="valor-categoria">{{ cat.total | currency:'BRL' }}</span>
         </div>
       } @empty {
         <p class="empty-msg">Adicione gastos para ver o resumo.</p>
