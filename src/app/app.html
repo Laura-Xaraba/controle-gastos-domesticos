@@ -2,7 +2,7 @@
   <button (click)="toggleDarkMode()" class="btn-flutuante" data-cy="btn-dark-mode" [title]="darkMode() ? 'Modo Claro' : 'Modo Escuro'">
     {{ darkMode() ? '☀️' : '🌙' }}
   </button>
-  <button (click)="abrirTutorial()" class="btn-flutuante" title="Como usar?">
+  <button (click)="abrirTutorial()" class="btn-flutuante" data-cy="btn-tutorial" [title]="'Como usar?'">
     ❓
   </button>
 </div>
