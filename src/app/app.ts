@@ -22,8 +22,9 @@ export class AppComponent implements OnInit {
   abriu = false;
 
   // Objeto para vincular ao formulário via ngModel
-  novoGasto: Gasto = {descricao: '',
-    valor: 0,
+  novoGasto: Partial<Gasto> = {
+    descricao: '',
+    valor: undefined,
     categoria: ''
   };
 
@@ -118,18 +119,27 @@ export class AppComponent implements OnInit {
 
   // --- OPERAÇÕES DE GASTOS ---
   adicionarGasto() {
-    // Validação básica de entrada
-    if (!this.novoGasto.descricao.trim() || this.novoGasto.valor <= 0 || !this.novoGasto.categoria) {
-      alert('Por favor, preencha todos os campos corretamente. O valor deve ser maior que zero.');
-      return;
+    const { descricao, valor, categoria } = this.novoGasto;
+
+    if (descricao && valor !== undefined && valor !== null && categoria) {
+
+      const gastoFinal: Gasto = {
+        descricao: descricao,
+        valor: Number(valor),
+        categoria: categoria
+      };
+
+      this.listaGastos.update(lista => [...lista, gastoFinal]);
+
+      this.novoGasto = {
+        descricao: '',
+        valor: undefined,
+        categoria: '',
+      };
+
+    } else {
+      alert("Por favor, preencha todos os campos corretamente.")
     }
-
-    // Adiciona à lista usando imutabilidade (spread operator)
-    this.listaGastos.update(atual => [...atual, { ...this.novoGasto }]);
-
-    // Persistência e limpeza
-    this.salvarNoLocalStorage();
-    this.novoGasto = { descricao: '', valor: 0, categoria: '' };
   }
 
   removerGasto(index: number) {
