@@ -15,6 +15,8 @@ O projeto está alinhado com os Objetivos de Desenvolvimento Sustentável (ODS) 
 * **Persistência:** LocalStorage (focado em acessibilidade e privacidade, sem necessidade de login).
 * **Testes E2E:** **Cypress** com TypeScript.
 
+<img width="8191" height="981" alt="Untitled diagram-2026-04-14-164844" src="https://github.com/user-attachments/assets/64e76b9f-ce22-415b-84d7-80c7b81f8ddd" />
+
 ## 🧪 Foco em QA (O Diferencial)
 Embora seja um app simples, o chapter de **Quality Assurance** foi levado a sério. Decidi implementar o Cypress como adição estratégica para me aprofundar na ferramenta e garantir a entrega de um software resiliente.
 
