@@ -192,9 +192,12 @@ h3 {
 .table-card {
     background-color: white;
     border-radius: 12px; 
-    overflow: hidden;    
+    overflow: auto; 
+    overflow-x: auto;   
     border: 1px solid #f1f2f6;
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    width: 100%;
+    display: block;
 }
 
 table {
@@ -202,28 +205,50 @@ table {
     border-collapse: collapse;
 }
 
+th, td {
+    text-align: center;
+    color: var(--cor-texto-claro);
+    vertical-align: middle;
+}
+
 th {
     background-color: var(--cat-card-claro);
-    padding: 15px 12px;
-    color: var(--cor-texto-claro);
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 1px;
+    padding: 15px 12px;
 }
 
 td {
-    padding: 15px 12px;
     border-bottom: 1px solid #f1f2f6;
-    color: var(--cor-texto-claro);
+    padding: 15px 12px;
+}
+
+td[data-cy="gasto-descricao"] {
+    min-width: 120px;
+}
+
+th.acoes-th {
+    width: 80px;
+    text-align: center;
+    padding: 12px;
+}
+
+td.acoes {
+    text-align: center;
+    vertical-align: middle;
+    height: 1px;
 }
 
 .btn-excluir {
+    display: inline-block;
+    line-height: 1;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
     cursor: pointer;
     font-size: 1.2rem;
-    padding: 5px;
+    padding: 10px;
     transition: transform 0.2s ease;
     outline: none;
 }

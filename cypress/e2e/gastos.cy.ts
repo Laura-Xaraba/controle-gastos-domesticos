@@ -167,6 +167,21 @@ describe('E2E: Interface e Integrações de Sistema', () => {
         });
     });
 
+    it('Deve exibir a tabela de gastos corretamente em dispositivos móveis', () => {
+        // 1. Simular visualização em dispositivo móvel
+        cy.viewport('iphone-6');   
+
+        // 2. Adicionar um gasto para garantir que a tabela tenha conteúdo
+        cy.get('[data-cy="input-descricao"]').type('Transporte');
+        cy.get('[data-cy="input-valor"]').type('80');
+        cy.get('[data-cy="select-categoria"]').select('Transporte');
+        cy.get('[data-cy="btn-adicionar"]').click();
+
+        // 3. Validar que a tabela de gastos é visível e adaptada para o layout móvel
+        cy.get('[data-cy="table-card"]').should('have.css', 'overflow-x', 'auto');
+
+    });
+
     it('Deve abrir e fechar o tutorial corretamente', () => {
         // 1. Validar que o tutorial está fechado inicialmente
         cy.get('[data-cy="tutorial"]').should('not.exist');
