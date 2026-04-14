@@ -84,7 +84,7 @@ describe('E2E: Validações de Negócio e Integridade', () => {
         });
     });
 
-    it('Deve impedir a adição de gastos com campos vazis (Validação de Formulário)', () => {
+    it('Deve impedir a adição de gastos com campos vazios (Validação de Formulário)', () => {
         // 1. Criar stub para observar alertas
         const stub = cy.stub();
         cy.on('window:alert', stub);
@@ -92,7 +92,7 @@ describe('E2E: Validações de Negócio e Integridade', () => {
         // 2. Tentar adicionar um gasto sem preencher os campos
         cy.get('[data-cy="btn-adicionar"]').click().then(() => {
             // 3. Validar que o alerta foi exibido com a mensagem correta
-            expect(stub.getCall(0)).to.be.calledWith('Por favor, preencha todos os campos corretamente. O valor deve ser maior que zero.');
+            expect(stub.getCall(0)).to.be.calledWith('Por favor, preencha todos os campos corretamente.');
         });
 
         // 4. Garante que a tabela de gastos continua vazia

@@ -131,6 +131,8 @@ export class AppComponent implements OnInit {
 
       this.listaGastos.update(lista => [...lista, gastoFinal]);
 
+      localStorage.setItem('meus-gastos', JSON.stringify(this.listaGastos()));
+
       this.novoGasto = {
         descricao: '',
         valor: undefined,
